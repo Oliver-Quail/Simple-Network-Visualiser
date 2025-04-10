@@ -1,5 +1,6 @@
 import pyshark
 from database import dataHandler
+from datetime import datetime
 
 #file_location = input("Please enter the location of the pcap file: ")
 file_location = "./samples/malware.pcap"
@@ -32,6 +33,11 @@ for packet in capture:
             keys = data.keys()
 
         destination_ip = packet.ip.dst
+
+        sniff_time = packet.sniff_time
+
+        unix_time = sniff_time.timestamp()
+        print(unix_time)
 
         if destination_ip not in data[source_ip]:
             data[source_ip][destination_ip] = 0
