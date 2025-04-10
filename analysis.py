@@ -1,5 +1,5 @@
 import pyshark
-import sqlite3
+from database import dataHandler
 
 #file_location = input("Please enter the location of the pcap file: ")
 file_location = "./samples/malware.pcap"
@@ -13,16 +13,39 @@ except FileNotFoundError:
     exit()
 
 
+handler = dataHandler()
+
+data = {}
+
+keys = data.keys()
+
+index = 0
 for packet in capture:
 
     try:
+        
         # fetch the source IP
         source_ip = packet.ip.src
+
+        if source_ip not in keys:
+            data[source_ip] = {}
+            keys = data.keys()
+
         destination_ip = packet.ip.dst
-        print(source_ip)
+
+        if destination_ip not in data[source_ip]:
+            data[source_ip][destination_ip] = 0
+        
+        data[source_ip][destination_ip] += 1
+
     except:
-        print("failed")
+        print("Packet did not contain IP address")
         continue
     
-    pass
+    index += 1
 
+    if index >= 200:
+        break
+    
+    
+print(data)
