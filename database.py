@@ -8,7 +8,7 @@ class dataHandler:
 
         #self.con.execute("CREATE TABLE investigations (investigation_name varchar(60), id auto_increment) PRIMARY KEY(id)")
         try:
-            self.con.execute("CREATE TABLE data(source VARCHAR NOT NULL, destination, VARCHAR NOT NULL, count INTEGER)")
+            self.con.execute("CREATE TABLE data(source VARCHAR NOT NULL, destination VARCHAR NOT NULL, time REAL NOT NULL)")
         except sqlite3.OperationalError:
             print("DB tables already exist")
 
