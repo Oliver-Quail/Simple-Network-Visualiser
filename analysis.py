@@ -17,6 +17,8 @@ except FileNotFoundError:
 
 handler = dataHandler()
 
+traffic = []
+
 data = {}
 
 keys = data.keys()
@@ -41,6 +43,7 @@ for packet in capture:
         
         unix_time = sniff_time.timestamp()
 
+        traffic.append({"source": source_ip, "desination":destination_ip, "sniff_time":unix_time})
 
         if math.floor(float(unix_time)) not in times:
             times.append(math.floor(float(unix_time)))
@@ -61,5 +64,9 @@ for packet in capture:
     if index >= 200:
         break
     
-    
+print(traffic)
+
+for record in traffic:
+    handler.addData(record["source"], record["desination"], record["sniff_time"])
+
 print(data)

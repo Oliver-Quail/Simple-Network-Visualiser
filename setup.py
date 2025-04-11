@@ -15,5 +15,7 @@ else:
     os.system("source ./.venv/bin/activate")
 
 os.system("pip install pyshark")
+os.system("pip install flask")
+os.system("pip install SQLAlchemy")
 os.system("mkdir samples")
 #os.system("python")
