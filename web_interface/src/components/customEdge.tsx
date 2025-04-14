@@ -1,4 +1,4 @@
-import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react"
+import { BaseEdge, EdgeLabelRenderer, EdgeProps, getSmoothStepPath, getStraightPath, useReactFlow } from "@xyflow/react"
 
 interface edgeProps {
     id :String
@@ -9,21 +9,29 @@ const CustomEdge = ({id,
     sourceY,
     targetX,
     targetY,
-    sourcePosition,
-    targetPosition
   }: EdgeProps) => {
-
-    const [edgePath, labelX, labelY] = getSmoothStepPath({
+    const { setEdges } = useReactFlow();
+    const [edgePath, labelX, labelY] = getStraightPath({
         sourceX,
         sourceY,
         targetX,
         targetY,
-        sourcePosition,
-        targetPosition,
       });
 
     return (
-        <BaseEdge path={edgePath} id={id}/>
+        <>
+            <BaseEdge path={edgePath} id={id}/>
+            <EdgeLabelRenderer>
+                <button
+                    style={{
+                        position: 'absolute',
+                        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+                        pointerEvents: 'all',
+                        }}
+                        className="nodrag nopan"
+                >aaaa</button>
+            </EdgeLabelRenderer>
+        </>
     )
 }
 
