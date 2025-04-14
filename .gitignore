@@ -2,3 +2,29 @@ samples/
 .venv/
 __pycache__/
 analysis.db
+
+
+
+
+# web interface dependenacies
+# dependencies
+web_interface/node_modules
+web_interface/.pnp
+web_interface/.pnp.js
+
+# testing
+web_interface/coverage
+
+# production
+web_interface/build
+
+# misc
+web_interface/.DS_Store
+web_interface/.env.local
+web_interface/.env.development.local
+web_interface/.env.test.local
+web_interface/.env.production.local
+
+web_interface/npm-debug.log*
+web_interface/yarn-debug.log*
+web_interface/yarn-error.log*
