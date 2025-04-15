@@ -76,14 +76,25 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
       console.log("Is updating")
       if(props.edges?.length == 0) {
         fetch("http://localhost:3000/api/nodes", {headers:{'Access-Control-Allow-Origin': '*'}}).then((result :Response) => {
+          let keys :string[] = []
                 result.json().then((response) => {
                     // Create a temp holder to limit number of updates required
+                    console.table(response)
                     let holder :Node[] = []
                     let tempEdges :Edge[] = []
 
                     for(let index = 0; index < response.length; index++){
-                        holder.push({ id: response[index][0], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][0] }})
-                        tempEdges.push({ id: response[index][0], source: response[index][0], target: response[3][0], type:"custom-edge", animated:true})
+                        if(!(keys.includes(response[index][0]))) {
+                          holder.push({ id: response[index][0], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][0] }})
+                          keys.push(response[index][0])
+                          console.log(keys)
+                        }
+                        if(!(keys.includes(response[index][1]))) {
+                          holder.push({ id: response[index][1], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][1] }})
+                          keys.push(response[index][1])
+                          console.log(keys)
+                        }
+                        tempEdges.push({ id: response[index][0] + index, source: response[index][0], target: response[index][1], type:"custom-edge", animated:true})
                     }
                     console.log("nodes updated")
                     console.log("Edges")
