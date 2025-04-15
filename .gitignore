@@ -2,7 +2,7 @@ samples/
 .venv/
 __pycache__/
 analysis.db
-
+files/
 
 
 

@@ -35,6 +35,6 @@ def getNetworkTraffic():
 def getNodes():
     connection = sqlite3.connect("/home/oliver/Documents/Uni/SIT326/HD/Simple-Network-Visualiser/analysis.db")
     cursor = connection.cursor()
-    cursor.execute("SELECT DISTINCT source FROM data;")
+    cursor.execute("SELECT DISTINCT source, destination FROM data;")
     return cursor.fetchall()
 

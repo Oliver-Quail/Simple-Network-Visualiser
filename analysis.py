@@ -2,12 +2,13 @@ import pyshark
 from database import dataHandler
 from datetime import datetime
 import math
+import os
 
 #file_location = input("Please enter the location of the pcap file: ")
 file_location = "./samples/malware.pcap"
 
 try:
-    capture = pyshark.FileCapture(file_location)
+    capture = pyshark.FileCapture(file_location,  keep_packets=False)
     print("Loaded capture")
 except FileNotFoundError:
     print("The file name you entered is invalid!")
@@ -26,45 +27,61 @@ keys = data.keys()
 times = []
 
 index = 0
-for packet in capture:
+try:
+    os.mkdir("files")
 
-    try:
-        
-        # fetch the source IP
-        source_ip = packet.ip.src
+except FileExistsError:
+    pass
 
-        if source_ip not in keys:
-            data[source_ip] = {}
-            keys = data.keys()
+file_size = os.system("tcpdump -r "+ file_location +" -w ./files/captures -C 1")
+pcap_files = len(os.listdir("./files"))
 
-        destination_ip = packet.ip.dst
+for fileNum in range(0, pcap_files):
+    file = "captures" + str(fileNum)
+    if fileNum == 0:
+        file = "captures"
+    capture = pyshark.FileCapture("./files/" +file,  keep_packets=False)
+    for packet in capture:
+        try:
+            # fetch the source IP
+            source_ip = packet.ip.src
 
-        sniff_time = packet.sniff_time
-        
-        unix_time = sniff_time.timestamp()
+            if source_ip not in keys:
+                data[source_ip] = {}
+                keys = data.keys()
 
-        traffic.append({"source": source_ip, "desination":destination_ip, "sniff_time":unix_time})
+            destination_ip = packet.ip.dst
 
-        if math.floor(float(unix_time)) not in times:
-            times.append(math.floor(float(unix_time)))
-            print(math.floor(float(unix_time)))
+            sniff_time = packet.sniff_time
+            
+            unix_time = sniff_time.timestamp()
+
+            traffic.append({"source": source_ip, "desination":destination_ip, "sniff_time":unix_time})
+
+            if math.floor(float(unix_time)) not in times:
+                times.append(math.floor(float(unix_time)))
+                print(math.floor(float(unix_time)))
 
 
-        if destination_ip not in data[source_ip]:
-            data[source_ip][destination_ip] = 0
-        
-        data[source_ip][destination_ip] += 1
+            if destination_ip not in data[source_ip]:
+                data[source_ip][destination_ip] = 0
+            
+            data[source_ip][destination_ip] += 1
+            
 
-    except:
-        print("Packet did not contain IP address")
-        continue
-    
-    index += 1
+        except Exception as e:
+            print(e)
+            continue
+        print(index)
+        index += 1
 
-    if index >= 200:
-        break
-    
-print(traffic)
+    for record in traffic:
+        handler.addData(record["source"], record["desination"], record["sniff_time"])
+    traffic = []
+
+print("exited")
+
+os.system("rm -rf ./files")
 
 for record in traffic:
     handler.addData(record["source"], record["desination"], record["sniff_time"])
