@@ -29,3 +29,12 @@ def getNetworkTraffic():
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM data;")
     return cursor.fetchall()
+
+
+@app.route("/api/nodes", methods=["GET"])
+def getNodes():
+    connection = sqlite3.connect("/home/oliver/Documents/Uni/SIT326/HD/Simple-Network-Visualiser/analysis.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT DISTINCT source FROM data;")
+    return cursor.fetchall()
+

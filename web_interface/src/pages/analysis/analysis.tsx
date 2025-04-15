@@ -1,4 +1,4 @@
-import { Edge, ReactFlow } from '@xyflow/react';
+import { Edge, Node, ReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import EdgeLabel from '../../components/edgeLabel';
 import CustomEdge from '../../components/customEdge';
@@ -14,13 +14,25 @@ const initialNodes = [
 
 const AnalysisPage = () => {
     const [data, setData] = useState<any>();
-
+    const [nodes, setNodes] = useState<Node[]>()
+    const [edges, setEdges] = useState<Edge[]>()
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/network", {headers:{'Access-Control-Allow-Origin': '*'}}).then((result :Response) => {
+        fetch("http://localhost:3000/api/nodes", {headers:{'Access-Control-Allow-Origin': '*'}}).then((result :Response) => {
                 result.json().then((response) => {
-                    setData(response)
-                    console.log(response)
+                    // Create a temp holder to limit number of updates required
+                    let holder :Node[] = []
+                    let tempEdges :Edge[] = []
+
+                    for(let index = 0; index < response.length; index++){
+                        holder.push({ id: response[index][0], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][0] }})
+                        tempEdges.push({ id: response[index][0] + "aaaaa", source: response[index][0], target: response[3][0], type:"custom-edge"})
+                    }
+                    console.log("nodes updated")
+                    console.table(holder)
+                    setNodes(holder)
+                    setEdges(tempEdges)
+                    
                 })
                 
         })
@@ -30,7 +42,7 @@ const AnalysisPage = () => {
 
         <article>
             <div style={{ width: '100vw', height: '100vh' }}>
-                <ReactFlow nodes={initialNodes} edges={initialEdges} edgeTypes={edgeTypes} />
+                <ReactFlow nodes={nodes} edges={edges} edgeTypes={edgeTypes} />
             </div>
         </article>
     )
