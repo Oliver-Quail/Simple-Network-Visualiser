@@ -15,7 +15,6 @@ class dataHandler:
 
     def addData(self, source, destination, sniff_time):
         query = """INSERT INTO data (source, destination, time) VALUES (?,?,?)"""
-        print(query)
         self.con.execute(query, (source, destination, sniff_time))
         self.con.commit()
         

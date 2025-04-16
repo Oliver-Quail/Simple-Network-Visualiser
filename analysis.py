@@ -3,6 +3,7 @@ from database import dataHandler
 from datetime import datetime
 import math
 import os
+from scapy import *
 
 #file_location = input("Please enter the location of the pcap file: ")
 file_location = "./samples/malware.pcap"
@@ -60,19 +61,20 @@ for fileNum in range(0, pcap_files):
 
             if math.floor(float(unix_time)) not in times:
                 times.append(math.floor(float(unix_time)))
-                print(math.floor(float(unix_time)))
+                #print(math.floor(float(unix_time)))
 
 
             if destination_ip not in data[source_ip]:
                 data[source_ip][destination_ip] = 0
             
             data[source_ip][destination_ip] += 1
-            
+
+            if packet.dns.resp_name:
+                print("aaa: " + packet.dns.resp_addr)            
 
         except Exception as e:
-            print(e)
             continue
-        print(index)
+        #print(index)
         index += 1
 
     for record in traffic:
