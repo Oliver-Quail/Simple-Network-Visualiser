@@ -39,7 +39,7 @@ def getNodes():
     return cursor.fetchall()
 
 
-@app.route("api/time", methods=["GET"])
+@app.route("/api/time", methods=["GET"])
 def get_time_range():
     connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
     cursor = connection.cursor()

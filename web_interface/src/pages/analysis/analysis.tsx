@@ -72,7 +72,13 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     const [isUpdating, setIsUpdating] = useState<Boolean>(false)
     const [data, setData] = useState<any>()
     const [updateRequired, setUpdateReqired] = useState<Boolean>(true)
-    const [timeWindow, setTimeWindow] = useState<any>()
+    const [timeWindow, setTimeWindow] = useState<number[]>([0, 100000000])
+    const [minTime, setMinTime] = useState<number>(0)
+    const [maxTime, setMaxTime] = useState<number>(1000000000000)
+
+    const handleTimeWindowChange = (event :Event, newValue :number[]) => {
+      setTimeWindow(newValue)
+    }
 
     useEffect(() => {
       console.log("Is updating")
@@ -108,18 +114,26 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
                 })   
         })
         }
-        else {
-          console.log("waiting")
-          wait(2000)
-          console.log("waited")
-        }
+        fetch("http://localhost:3000/api/time", {}).then((result :Response) => {
+          result.json().then((response) => {
+            setTimeWindow([response[0][0]* (1/1000000), response[0][1]* (1/1000000)])
+            setMinTime(response[0][0] * (1/1000000))
+            setMaxTime(response[0][1]* (1/1000000))
+          })
+        })
     }, [props.edges]) 
 
     return(
 
         <article>
           <p onClick={() => {getLayoutedElements({})}}>Update graph</p>
-          <Slider value={timeWindow} />
+          <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
+            <Slider style={{"width" : "90vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
+            <section>
+              <p>Min: {timeWindow[0]}</p>
+              <p>Max: {timeWindow[1]}</p>
+            </section>
+          </section>
             <div style={{ width: '100vw', height: '100vh' }}>
                 <ReactFlow nodes={props.nodes} edges={props.edges} edgeTypes={edgeTypes} onNodesChange={props.onNodesChange} onEdgesChange={props.onEdgesChange}>
                   <MiniMap />  
