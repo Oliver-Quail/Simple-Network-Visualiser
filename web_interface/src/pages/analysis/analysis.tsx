@@ -6,6 +6,7 @@ import CustomEdge from '../../components/customEdge';
 import { useCallback, useEffect, useState } from 'react';
 import ELK, { ElkExtendedEdge, ElkNode, LayoutOptions } from 'elkjs/lib/elk.bundled.js';
 import { wait } from '@testing-library/user-event/dist/utils';
+import { Slider } from '@mui/material';
 
 const edgeTypes = {"custom-edge" : CustomEdge}
 
@@ -71,6 +72,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     const [isUpdating, setIsUpdating] = useState<Boolean>(false)
     const [data, setData] = useState<any>()
     const [updateRequired, setUpdateReqired] = useState<Boolean>(true)
+    const [timeWindow, setTimeWindow] = useState<any>()
 
     useEffect(() => {
       console.log("Is updating")
@@ -117,6 +119,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
         <article>
           <p onClick={() => {getLayoutedElements({})}}>Update graph</p>
+          <Slider value={timeWindow} />
             <div style={{ width: '100vw', height: '100vh' }}>
                 <ReactFlow nodes={props.nodes} edges={props.edges} edgeTypes={edgeTypes} onNodesChange={props.onNodesChange} onEdgesChange={props.onEdgesChange}>
                   <MiniMap />  
