@@ -114,6 +114,9 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
                 })   
         })
         }
+        if(timeWindow[0] == 0) {
+
+        
         fetch("http://localhost:3000/api/time", {}).then((result :Response) => {
           result.json().then((response) => {
             setTimeWindow([response[0][0]* (1/1000000), response[0][1]* (1/1000000)])
@@ -121,6 +124,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
             setMaxTime(response[0][1]* (1/1000000))
           })
         })
+      }
     }, [props.edges]) 
 
     return(
