@@ -9,6 +9,7 @@ const CustomEdge = ({id,
     sourceY,
     targetX,
     targetY,
+    data
   }: EdgeProps) => {
     const { setEdges } = useReactFlow();
     const [edgePath, labelX, labelY] = getStraightPath({
@@ -28,8 +29,7 @@ const CustomEdge = ({id,
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         pointerEvents: 'all',
                         }}
-                        className="nodrag nopan"
-                >aaaa</button>
+                        className="nodrag nopan">View more data</button>
             </EdgeLabelRenderer>
         </>
     )

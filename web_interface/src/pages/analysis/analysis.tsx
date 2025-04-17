@@ -29,8 +29,8 @@ const useLayoutedElements = () => {
         layoutOptions: layoutOptions,
         children: getNodes().map((node) => ({
           ...node,
-          width: 100,
-          height: 30,
+          width: 200,
+          height: 50,
         })),
         edges: getEdges(),
       };
@@ -90,11 +90,11 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
                           console.log(keys)
                         }
                         if(!(keys.includes(response[index][1]))) {
-                          holder.push({ id: response[index][1], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][1] }})
+                          holder.push({ id: response[index][1], position: { x: 0 + index * 100, y: 100 * index }, data: { label: response[index][1] + "\n (" + response[index][2] + ")" }})
                           keys.push(response[index][1])
                           console.log(keys)
                         }
-                        tempEdges.push({ id: response[index][0] + index, source: response[index][0], target: response[index][1], type:"custom-edge", animated:true})
+                        tempEdges.push({ id: response[index][0] + index, source: response[index][0], target: response[index][1], type:"custom-edge", animated:true, data:{"a": response[index][1]}})
                     }
                     console.log("nodes updated")
                     console.log("Edges")
