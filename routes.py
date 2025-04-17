@@ -25,7 +25,7 @@ def start():
 
 @app.route("/api/network", methods=["GET"])
 def getNetworkTraffic():
-    connection = sqlite3.connect("/home/oliver/Documents/Uni/SIT326/HD/Simple-Network-Visualiser/analysis.db")
+    connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM data;")
     return cursor.fetchall()
@@ -33,8 +33,8 @@ def getNetworkTraffic():
 
 @app.route("/api/nodes", methods=["GET"])
 def getNodes():
-    connection = sqlite3.connect("/home/oliver/Documents/Uni/SIT326/HD/Simple-Network-Visualiser/analysis.db")
+    connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
     cursor = connection.cursor()
-    cursor.execute("SELECT DISTINCT source, destination FROM data;")
+    cursor.execute("SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;")
     return cursor.fetchall()
 
