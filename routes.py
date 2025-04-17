@@ -1,7 +1,6 @@
 from . import app
 import sqlite3
-
-
+from flask import request
 
 class InterceptRequestMiddleware:
     def __init__(self, wsgi_app):
@@ -33,10 +32,17 @@ def getNetworkTraffic():
 
 @app.route("/api/nodes", methods=["GET"])
 def getNodes():
-    connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;")
-    return cursor.fetchall()
+        minTime = request.args.get("minTime")
+        maxTime = request.args.get("maxTime")
+
+        if minTime != None and maxTime != None:
+            query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address WHERE time >=" + minTime +" AND time <= " + maxTime +" ;"
+        else:
+            query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;"
+        connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
+        cursor = connection.cursor()
+        cursor.execute(query)
+        return cursor.fetchall()
 
 
 @app.route("/api/time", methods=["GET"])
