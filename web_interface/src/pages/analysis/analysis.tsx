@@ -65,6 +65,8 @@ interface AnalysisPageFlowGraphProps {
     onEdgesChange :OnEdgesChange<Edge> | undefined
 }
 
+const endPoint = "http://localhost:3000"
+
 const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
     const { getLayoutedElements } = useLayoutedElements();
@@ -72,7 +74,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     const [isUpdating, setIsUpdating] = useState<Boolean>(false)
     const [data, setData] = useState<any>()
     const [updateRequired, setUpdateReqired] = useState<Boolean>(true)
-    const [timeWindow, setTimeWindow] = useState<number[]>([0, 100000000])
+    const [timeWindow, setTimeWindow] = useState<number[]>([0, 1000000000000])
     const [minTime, setMinTime] = useState<number>(0)
     const [maxTime, setMaxTime] = useState<number>(1000000000000)
 
@@ -81,9 +83,10 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     }
 
     useEffect(() => {
+      
       console.log("Is updating")
       if(props.edges?.length == 0) {
-        fetch("http://localhost:3000/api/nodes", {headers:{'Access-Control-Allow-Origin': '*'}}).then((result :Response) => {
+        fetch(endPoint + "/api/nodes?minTime=" + timeWindow[0] + "&maxTime=" + timeWindow[1], {headers:{'Access-Control-Allow-Origin': '*'}}).then((result :Response) => {
           let keys :string[] = []
                 result.json().then((response) => {
                     // Create a temp holder to limit number of updates required
@@ -115,8 +118,6 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
         })
         }
         if(timeWindow[0] == 0) {
-
-        
         fetch("http://localhost:3000/api/time", {}).then((result :Response) => {
           result.json().then((response) => {
             setTimeWindow([response[0][0]* (1/1000000), response[0][1]* (1/1000000)])
