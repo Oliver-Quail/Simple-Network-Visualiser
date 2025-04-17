@@ -23,6 +23,3 @@ class dataHandler:
         query = """INSERT INTO dns_records (ip_address, common_name) VALUES (?,?)"""
         self.con.execute(query, (ip_address, common_name))
         self.con.commit()
-        
-
-    

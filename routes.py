@@ -38,3 +38,10 @@ def getNodes():
     cursor.execute("SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;")
     return cursor.fetchall()
 
+
+@app.route("api/time", methods=["GET"])
+def get_time_range():
+    connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT MIN(time) as smallest, MAX(time) as largest FROM data;")
+    return cursor.fetchall()
