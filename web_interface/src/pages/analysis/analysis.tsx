@@ -20,7 +20,6 @@ const useLayoutedElements = () => {
       'elk.spacing.nodeNode': 80,
     };
     
-    console.log(getNodes())
    
     const getLayoutedElements = useCallback((options :LayoutOptions) => {
       console.log("activated")
@@ -131,16 +130,16 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     return(
 
         <article>
-          <p onClick={() => {getLayoutedElements({})}}>Update graph</p>
+          <p onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update graph</p>
           <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
-            <Slider style={{"width" : "90vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
+            <Slider style={{"width" : "100vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
             <section>
               <p>Min: {timeWindow[0]}</p>
               <p>Max: {timeWindow[1]}</p>
             </section>
           </section>
             <div style={{ width: '100vw', height: '100vh' }}>
-                <ReactFlow nodes={props.nodes} edges={props.edges} edgeTypes={edgeTypes} onNodesChange={props.onNodesChange} onEdgesChange={props.onEdgesChange}>
+                <ReactFlow nodes={props.nodes} edges={props.edges} edgeTypes={edgeTypes} onNodesChange={props.onNodesChange} onEdgesChange={props.onEdgesChange} style={{"width": "100%"}}>
                   <MiniMap />  
                 </ReactFlow>
             </div>
@@ -151,7 +150,8 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
 
 const AnalysisPage = () => {
-    const [nodes, setNodes, onNodesChange] = useNodesState<Node>([{ id: "aaa", position: { x: 0, y: 0 }, data: { label: "test" }}])
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node>([{ id: "aaa", position: { x: 0, y: 0 }, data: { label: "test" }}, { id: "aaa1", position: { x: 3, y: 5 }, data: { label: "test1" }}, { id: "aaa2", position: { x: 0, y: 0 }, data: { label: "test2" }}, { id: "aaa3", position: { x: 0, y: 0 }, data: { label: "test3" }} ])
+    //const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([{ id:"bb", target: "aaa", source:"aaa1" }, { id:"bb1", target: "aaa", source:"aaa2" }, { id:"bb2", target: "aaa", source:"aaa2" }, { id:"bb3", target: "aaa", source:"aaa3" }])
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 
     return (
