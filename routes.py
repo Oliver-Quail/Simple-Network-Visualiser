@@ -34,12 +34,14 @@ def getNetworkTraffic():
 def getNodes():
         minTime = request.args.get("minTime") 
         maxTime = request.args.get("maxTime")
+        
+        query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;"
 
+        if request.args.get("minTime") != None and request.args.get("maxTime") != None:
+            maxTime = round(float(maxTime) * 1000000)
+            minTime = round(float(minTime) * 1000000)
+            query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address WHERE time >=" + str(minTime) +" AND time <= " + str(maxTime) +" ;"
 
-        if minTime != None and maxTime != None:
-            query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address WHERE time >=" + minTime * 1000000 +" AND time <= " + maxTime * 1000000 +" ;"
-        else:
-            query = "SELECT DISTINCT d.source, d.destination, dns.common_name FROM data d LEFT JOIN dns_records dns ON d.destination = dns.ip_address;"
         connection = sqlite3.connect("Simple-Network-Visualiser/analysis.db")
         cursor = connection.cursor()
         cursor.execute(query)
