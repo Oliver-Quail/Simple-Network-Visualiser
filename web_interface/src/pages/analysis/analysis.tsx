@@ -131,6 +131,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
         <article>
           <p onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update graph</p>
+          <p onClick={() => {props.setEdges([]); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
           <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
             <Slider style={{"width" : "100vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
             <section>
