@@ -76,6 +76,8 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
     const [timeWindow, setTimeWindow] = useState<number[]>([0, 1000000000000])
     const [minTime, setMinTime] = useState<number>(0)
     const [maxTime, setMaxTime] = useState<number>(1000000000000)
+    const [oringinalData, setOriginalData] = useState<any>({});
+    const [filterDNS, setFilterDNS] = useState<Boolean>(false);
 
     const handleTimeWindowChange = (event :Event, newValue :number[]) => {
       setTimeWindow(newValue)
@@ -111,10 +113,50 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
                     props.setEdges(tempEdges)
                     props.setNodes(holder)
-
+                    setOriginalData(response)
                     setIsUpdating(false)
                 })   
         })
+        }
+        if(filterDNS) {
+          console.log("yay")
+          let keys :string[] = []
+          let holder :Node[] = []
+          let tempEdges :Edge[] = []
+          for(let index = 0; index < oringinalData.length; index++) {
+            if(oringinalData[index][2] != null) {
+              if(!(keys.includes(oringinalData[index][0]))) {
+                holder.push({ id: oringinalData[index][0], position: { x: 0 + index * 100, y: 100 * index }, data: { label: oringinalData[index][0] }})
+                keys.push(oringinalData[index][0])
+              }
+              if(!(keys.includes(oringinalData[index][1]))) {
+                holder.push({ id: oringinalData[index][1], position: { x: 0 + index * 100, y: 100 * index }, data: { label: oringinalData[index][1] + "\n (" + oringinalData[index][2] + ")" }})
+                keys.push(oringinalData[index][1])
+              }
+              tempEdges.push({ id: oringinalData[index][0] + index, source: oringinalData[index][0], target: oringinalData[index][1], type:"custom-edge", animated:true, data:{"a": oringinalData[index][1]}})
+            }
+          }
+          props.setNodes(holder)
+          props.setEdges(tempEdges)
+        }
+        else {
+          let keys :string[] = []
+          let holder :Node[] = []
+          let tempEdges :Edge[] = []
+          for(let index = 0; index < oringinalData.length; index++) {
+            if(!(keys.includes(oringinalData[index][0]))) {
+              holder.push({ id: oringinalData[index][0], position: { x: 0 + index * 100, y: 100 * index }, data: { label: oringinalData[index][0] }})
+              keys.push(oringinalData[index][0])
+            }
+            if(!(keys.includes(oringinalData[index][1]))) {
+              holder.push({ id: oringinalData[index][1], position: { x: 0 + index * 100, y: 100 * index }, data: { label: oringinalData[index][1] + "\n (" + oringinalData[index][2] + ")" }})
+              keys.push(oringinalData[index][1])
+            }
+            tempEdges.push({ id: oringinalData[index][0] + index, source: oringinalData[index][0], target: oringinalData[index][1], type:"custom-edge", animated:true, data:{"a": oringinalData[index][1]}})
+            }
+          
+          props.setNodes(holder)
+          props.setEdges(tempEdges)
         }
         if(timeWindow[0] == 0) {
         fetch("http://localhost:3000/api/time", {}).then((result :Response) => {
@@ -125,7 +167,7 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
           })
         })
       }
-    }, [props.edges]) 
+    }, [filterDNS]) 
 
     return(
 
@@ -134,7 +176,8 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
             <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Force graph</p>
             <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'layered'})}}>Tree graph</p>
             <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.radial'})}}>Radial graph</p>
-            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {props.setEdges([]); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {console.log(""); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {setFilterDNS(!filterDNS)}}>Filter to DNS</p>
           </section>
           <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
             <Slider style={{"width" : "100vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
