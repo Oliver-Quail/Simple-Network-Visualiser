@@ -131,8 +131,9 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
         <article style={{ width: '100vw', height: '100vh' }}>
           <section style={{"display": "flex"}}>
-            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Radial graph</p>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Force graph</p>
             <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'layered'})}}>Tree graph</p>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.radial'})}}>Radial graph</p>
             <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {props.setEdges([]); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
           </section>
           <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
