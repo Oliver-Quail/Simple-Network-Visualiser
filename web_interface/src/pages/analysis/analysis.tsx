@@ -129,17 +129,19 @@ const AnalysisPageFlowGraph = (props :AnalysisPageFlowGraphProps) => {
 
     return(
 
-        <article>
-          <p onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update graph</p>
-          <p onClick={() => {props.setEdges([]); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
+        <article style={{ width: '100vw', height: '100vh' }}>
+          <section style={{"display": "flex"}}>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update graph</p>
+            <p style={{"marginLeft":"5px", "cursor": "pointer"}} onClick={() => {props.setEdges([]); getLayoutedElements({'elk.algorithm': 'org.eclipse.elk.force'})}}>Update time</p>
+          </section>
           <section style={{"display": "flex", "flexDirection": "column", "justifyContent": "center", "alignItems": "center", "width": "100%"}}>
             <Slider style={{"width" : "100vw"}} value={timeWindow} min={minTime} max={maxTime} onChange={handleTimeWindowChange}/>
-            <section>
-              <p>Min: {timeWindow[0]}</p>
-              <p>Max: {timeWindow[1]}</p>
+            <section style={{"display": "flex", "justifyContent": "space-between", "width": "100%"}}>
+              <p>Start: {new Date(timeWindow[0]).toString()}</p>
+              <p>End: {new Date(timeWindow[1]).toString()}</p>
             </section>
           </section>
-            <div style={{ width: '100vw', height: '100vh' }}>
+            <div style={{"height":"100%"}}>
                 <ReactFlow nodes={props.nodes} edges={props.edges} edgeTypes={edgeTypes} onNodesChange={props.onNodesChange} onEdgesChange={props.onEdgesChange} style={{"width": "100%"}}>
                   <MiniMap />  
                 </ReactFlow>
