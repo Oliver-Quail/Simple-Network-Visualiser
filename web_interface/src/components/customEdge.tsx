@@ -28,8 +28,9 @@ const CustomEdge = ({id,
                         position: 'absolute',
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         pointerEvents: 'all',
+                        display: "none"
                         }}
-                        className="nodrag nopan">View more data</button>
+                        className="nodrag nopan"></button>
             </EdgeLabelRenderer>
         </>
     )
